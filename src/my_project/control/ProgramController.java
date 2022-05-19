@@ -1,10 +1,11 @@
 package my_project.control;
 
-import KAGO_framework.control.DatabaseController;
 import KAGO_framework.control.ViewController;
-import my_project.model.House;
+import KAGO_framework.model.abitur.datenstrukturen.Edge;
+import KAGO_framework.model.abitur.datenstrukturen.Graph;
+import KAGO_framework.model.abitur.datenstrukturen.Vertex;
+import my_project.model.GraphVisualization;
 
-import javax.swing.*;
 import java.awt.event.MouseEvent;
 
 /**
@@ -15,9 +16,9 @@ public class ProgramController {
 
     //Attribute
 
+    private ViewController viewController;
 
-    // Referenzen
-    private ViewController viewController;  // diese Referenz soll auf ein Objekt der Klasse viewController zeigen. Über dieses Objekt wird das Fenster gesteuert.
+    private Graph graph;
 
     /**
      * Konstruktor
@@ -34,12 +35,22 @@ public class ProgramController {
      * Diese Methode wird genau ein mal nach Programmstart aufgerufen. Achtung: funktioniert nicht im Szenario-Modus
      */
     public void startProgram() {
-        //Hier wird eine lokale Referenz für ein House-Objekt angelegt.
-        House firstHouse = new House();
+        graph = new Graph();
+        graph.addVertex(new Vertex("a"));
+        graph.addVertex(new Vertex("b"));
+        graph.addVertex(new Vertex("c"));
+        graph.addVertex(new Vertex("d"));
+        graph.addVertex(new Vertex("e"));
+        graph.addVertex(new Vertex("f"));
+        graph.addVertex(new Vertex("g"));
+        graph.addVertex(new Vertex("h"));
+        graph.addVertex(new Vertex("i"));
+        graph.addVertex(new Vertex("j"));
+        graph.addVertex(new Vertex("k"));
+        graph.addVertex(new Vertex("l"));
 
-        //Damit die draw-Methode des Objekts hinter firstHouse aufgerufen wird,
-        //muss dem ViewController-Objekt mitgeteilt werden, dass es das House-Objekt zeichnen soll.
-        viewController.draw(firstHouse);
+        GraphVisualization g = new GraphVisualization(graph);
+        viewController.draw(g);
     }
 
     /**
