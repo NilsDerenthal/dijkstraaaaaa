@@ -7,6 +7,8 @@ import KAGO_framework.model.abitur.datenstrukturen.Vertex;
 import my_project.model.GraphVisualization;
 
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * Ein Objekt der Klasse ProgramController dient dazu das Programm zu steuern. Die updateProgram - Methode wird
@@ -36,21 +38,32 @@ public class ProgramController {
      */
     public void startProgram() {
         graph = new Graph();
-        graph.addVertex(new Vertex("a"));
-        graph.addVertex(new Vertex("b"));
-        graph.addVertex(new Vertex("c"));
-        graph.addVertex(new Vertex("d"));
-        graph.addVertex(new Vertex("e"));
-        graph.addVertex(new Vertex("f"));
-        graph.addVertex(new Vertex("g"));
-        graph.addVertex(new Vertex("h"));
-        graph.addVertex(new Vertex("i"));
-        graph.addVertex(new Vertex("j"));
-        graph.addVertex(new Vertex("k"));
-        graph.addVertex(new Vertex("l"));
 
-        GraphVisualization g = new GraphVisualization(graph);
-        viewController.draw(g);
+        Vertex a = new Vertex("a");
+        Vertex b = new Vertex("b");
+        Vertex c = new Vertex("c");
+        Vertex d = new Vertex("d");
+        Vertex e = new Vertex("e");
+
+        var l = Arrays.asList(a, b, c, d, e);
+
+        for (Vertex vertex : l) {
+            graph.addVertex(vertex);
+        }
+
+        for (Vertex x : l) {
+            for (Vertex y : l) {
+                graph.addEdge(new Edge(x, y, 0));
+            }
+        }
+
+        GraphVisualization graphVis = new GraphVisualization(graph);
+        graphVis.load();
+        viewController.draw(graphVis);
+    }
+
+    private void dijkstra () {
+
     }
 
     /**
@@ -59,7 +72,7 @@ public class ProgramController {
      * implementiert, aber dafür funktioniert das Programm auch bei falscher Java-Version
      * @param dt Zeit seit letzter Frame
      */
-    public void updateProgram(double dt){
+    public void updateProgram(double dt) {
 
     }
 
@@ -68,7 +81,5 @@ public class ProgramController {
      * Verarbeitet einen Mausklick.
      * @param e das Objekt enthält alle Informationen zum Klick
      */
-    public void mouseClicked(MouseEvent e){
-
-    }
+    public void mouseClicked(MouseEvent e){}
 }
