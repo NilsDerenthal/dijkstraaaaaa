@@ -3,12 +3,13 @@ package my_project.control;
 import KAGO_framework.control.ViewController;
 import KAGO_framework.model.abitur.datenstrukturen.Edge;
 import KAGO_framework.model.abitur.datenstrukturen.Graph;
+import KAGO_framework.model.abitur.datenstrukturen.List;
 import KAGO_framework.model.abitur.datenstrukturen.Vertex;
-import my_project.model.GraphVisualization;
+import my_project.model.VertexData;
+import my_project.view.GraphVisualization;
 
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 /**
  * Ein Objekt der Klasse ProgramController dient dazu das Programm zu steuern. Die updateProgram - Methode wird
@@ -21,6 +22,9 @@ public class ProgramController {
     private ViewController viewController;
 
     private Graph graph;
+
+    private boolean done;
+    private double timer;
 
     /**
      * Konstruktor
@@ -44,27 +48,47 @@ public class ProgramController {
         Vertex c = new Vertex("c");
         Vertex d = new Vertex("d");
         Vertex e = new Vertex("e");
+        Vertex f = new Vertex("f");
 
-        var l = Arrays.asList(a, b, c, d, e);
+        var l = Arrays.asList(a, b, c, d, e, f);
 
         for (Vertex vertex : l) {
             graph.addVertex(vertex);
         }
 
-        for (Vertex x : l) {
-            for (Vertex y : l) {
-                graph.addEdge(new Edge(x, y, 0));
-            }
-        }
+        graph.addEdge(new Edge(a, b, 1));
+        graph.addEdge(new Edge(b, c, 2));
+
+        graph.addEdge(new Edge(a, d, 5));
+
+        graph.addEdge(new Edge(c, d, 3));
+        graph.addEdge(new Edge(d, e, 4));
+
+        graph.addEdge(new Edge(a, e, 14));
+
+        graph.addEdge(new Edge(a, f, 7));
+
+        graph.addEdge(new Edge(f, e, 1));
 
         GraphVisualization graphVis = new GraphVisualization(graph);
-        graphVis.load();
+        graphVis.loadCoordinates();
         viewController.draw(graphVis);
+
+        timer = 0;
     }
 
-    private void dijkstra () {
+    private List<VertexData> dijkstra (Vertex start, Vertex end) {
+        var worker = new Dijkstra(graph, start, end, () -> viewController.getDrawFrame().repaint());
+        var tmp = worker.execute();
 
+        List<VertexData> res = new List<>();
+        while (tmp != null) {
+            res.append(tmp);
+            tmp = tmp.getPrev();
+        }
+        return res;
     }
+
 
     /**
      * Sorgt dafür, dass zunächst gewartet wird, damit der SoundController die
@@ -73,7 +97,23 @@ public class ProgramController {
      * @param dt Zeit seit letzter Frame
      */
     public void updateProgram(double dt) {
+        timer += dt;
 
+        if (timer >= 2 && !done) {
+            var res = dijkstra(
+                graph.getVertex("a"),
+                graph.getVertex("e")
+            );
+
+            System.out.println();
+
+            res.toFirst();
+            while (res.hasAccess()) {
+                System.out.println(res.getContent().getSrc().getID());
+                res.next();
+            }
+            done = true;
+        }
     }
 
 

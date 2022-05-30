@@ -1,4 +1,4 @@
-package my_project.model;
+package my_project.view;
 
 import KAGO_framework.model.GraphicalObject;
 import KAGO_framework.model.abitur.datenstrukturen.Edge;
@@ -18,15 +18,13 @@ public class GraphVisualization extends GraphicalObject {
 
 	private final Random rand;
 
-	private Edge highlight;
-
 	public GraphVisualization (Graph graph) {
 		this.graph = graph;
 		this.coordinates = new HashMap<>();
 		this.rand = new Random();
 	}
 
-	public void load () {
+	public void loadCoordinates () {
 		var l = graph.getVertices();
 
 		int x = 1;
@@ -36,7 +34,7 @@ public class GraphVisualization extends GraphicalObject {
 		while (l.hasAccess()) {
 			coordinates.put(
 				l.getContent(),
-				new Point(x * 100 + rand.nextInt(50), y * 100 + rand.nextInt(50))
+				new Point((x - 1) * 250 + rand.nextInt(50) + 10, (y - 1) * 250 + rand.nextInt(50) + 10)
 			);
 
 			// x + 1 unless at the end, then y = 0
@@ -45,10 +43,6 @@ public class GraphVisualization extends GraphicalObject {
 			x++;
 			l.next();
 		}
-	}
-
-	public void setHighlight (Edge edge) {
-		this.highlight = edge;
 	}
 
 	@Override
@@ -67,7 +61,12 @@ public class GraphVisualization extends GraphicalObject {
 			var c1 = coordinates.get(vertices[0]);
 			var c2 = coordinates.get(vertices[1]);
 
-			drawTool.setCurrentColor(edges.getContent() == highlight ? Color.GREEN : Color.BLACK);
+			double midX = (c1.getX() + c2.getX()) / 2d;
+			double midY = (c1.getY() + c2.getY()) / 2d;
+
+			drawTool.drawText(midX, midY, String.valueOf(edges.getContent().getWeight()));
+
+			drawTool.setCurrentColor(edges.getContent().isMarked() ? Color.GREEN : Color.BLACK);
 
 			drawTool.drawLine(
 				c1.getX(), c1.getY(),
