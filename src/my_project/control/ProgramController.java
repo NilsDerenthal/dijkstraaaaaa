@@ -5,6 +5,7 @@ import KAGO_framework.model.abitur.datenstrukturen.*;
 import my_project.model.VertexData;
 import my_project.view.GraphVisualization;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
@@ -19,8 +20,10 @@ public class ProgramController {
     private ViewController viewController;
 
     private Graph graph;
+    private GraphVisualization graphVis;
 
     private Queue<Edge> edges;
+    private Queue<Edge> result;
     private double timer;
 
     /**
@@ -67,23 +70,23 @@ public class ProgramController {
 
         graph.addEdge(new Edge(f, e, 1));
 
-        GraphVisualization graphVis = new GraphVisualization(graph);
+        graphVis = new GraphVisualization(graph);
         graphVis.loadCoordinates();
         viewController.draw(graphVis);
 
         timer = 0;
-        dijkstra(a, e);
+        result = dijkstra(a, e);
     }
 
-    private List<VertexData> dijkstra (Vertex start, Vertex end) {
+    private Queue<Edge> dijkstra (Vertex start, Vertex end) {
         var worker = new Dijkstra(graph, start, end);
         var tmp = worker.execute();
 
         this.edges = worker.getEdges();
 
-        List<VertexData> res = new List<>();
-        while (tmp != null) {
-            res.append(tmp);
+        Queue<Edge> res = new Queue<>();
+        while (tmp.getPrev() != null) {
+            res.enqueue(graph.getEdge(tmp.getSrc(), tmp.getPrev().getSrc()));
             tmp = tmp.getPrev();
         }
         return res;
@@ -99,13 +102,21 @@ public class ProgramController {
     public void updateProgram(double dt) {
         timer += dt;
 
-        edges.front().setMark(true);
-        if (timer > 0.5) {
-            if (!edges.isEmpty()) {
+        if (!edges.isEmpty()) {
+            edges.front().setMark(true);
+            if (timer > edges.front().getWeight() / 5f) {
+
                 edges.front().setMark(false);
                 edges.dequeue();
+
+                timer = 0;
             }
-            timer = 0;
+        } else {
+            graphVis.setMarkColor(Color.GREEN);
+            while (!result.isEmpty()) {
+                result.front().setMark(true);
+                result.dequeue();
+            }
         }
     }
 

@@ -18,10 +18,13 @@ public class GraphVisualization extends GraphicalObject {
 
 	private final Random rand;
 
+	private Color color;
+
 	public GraphVisualization (Graph graph) {
 		this.graph = graph;
 		this.coordinates = new HashMap<>();
 		this.rand = new Random();
+		this.color = Color.RED;
 	}
 
 	public void loadCoordinates () {
@@ -43,6 +46,10 @@ public class GraphVisualization extends GraphicalObject {
 			x++;
 			l.next();
 		}
+	}
+
+	public void setMarkColor (Color color) {
+		this.color = color;
 	}
 
 	@Override
@@ -71,8 +78,8 @@ public class GraphVisualization extends GraphicalObject {
 			drawTool.drawText(midX, midY, String.valueOf(edges.getContent().getWeight()));
 
 			if (edges.getContent().isMarked()) {
-				drawTool.setCurrentColor(Color.RED);
-				drawTool.setLineWidth(3);
+				drawTool.setCurrentColor(color);
+				drawTool.setLineWidth(4);
 			}
 
 			drawTool.drawLine(
