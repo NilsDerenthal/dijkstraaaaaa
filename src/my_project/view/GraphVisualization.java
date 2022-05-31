@@ -47,6 +47,7 @@ public class GraphVisualization extends GraphicalObject {
 
 	@Override
 	public void draw (DrawTool drawTool) {
+
 		coordinates.forEach((v, coordinate) -> {
 			drawTool.drawCircle(coordinate.getX(), coordinate.getY(), 10);
 			drawTool.drawText(coordinate.getX(), coordinate.getY(), v.getID());
@@ -64,9 +65,15 @@ public class GraphVisualization extends GraphicalObject {
 			double midX = (c1.getX() + c2.getX()) / 2d;
 			double midY = (c1.getY() + c2.getY()) / 2d;
 
+			drawTool.setCurrentColor(Color.GRAY);
+			drawTool.setLineWidth(1);
+
 			drawTool.drawText(midX, midY, String.valueOf(edges.getContent().getWeight()));
 
-			drawTool.setCurrentColor(edges.getContent().isMarked() ? Color.GREEN : Color.BLACK);
+			if (edges.getContent().isMarked()) {
+				drawTool.setCurrentColor(Color.RED);
+				drawTool.setLineWidth(3);
+			}
 
 			drawTool.drawLine(
 				c1.getX(), c1.getY(),

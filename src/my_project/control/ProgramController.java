@@ -1,10 +1,7 @@
 package my_project.control;
 
 import KAGO_framework.control.ViewController;
-import KAGO_framework.model.abitur.datenstrukturen.Edge;
-import KAGO_framework.model.abitur.datenstrukturen.Graph;
-import KAGO_framework.model.abitur.datenstrukturen.List;
-import KAGO_framework.model.abitur.datenstrukturen.Vertex;
+import KAGO_framework.model.abitur.datenstrukturen.*;
 import my_project.model.VertexData;
 import my_project.view.GraphVisualization;
 
@@ -23,7 +20,7 @@ public class ProgramController {
 
     private Graph graph;
 
-    private boolean done;
+    private Queue<Edge> edges;
     private double timer;
 
     /**
@@ -75,11 +72,14 @@ public class ProgramController {
         viewController.draw(graphVis);
 
         timer = 0;
+        dijkstra(a, e);
     }
 
     private List<VertexData> dijkstra (Vertex start, Vertex end) {
-        var worker = new Dijkstra(graph, start, end, () -> viewController.getDrawFrame().repaint());
+        var worker = new Dijkstra(graph, start, end);
         var tmp = worker.execute();
+
+        this.edges = worker.getEdges();
 
         List<VertexData> res = new List<>();
         while (tmp != null) {
@@ -99,20 +99,13 @@ public class ProgramController {
     public void updateProgram(double dt) {
         timer += dt;
 
-        if (timer >= 2 && !done) {
-            var res = dijkstra(
-                graph.getVertex("a"),
-                graph.getVertex("e")
-            );
-
-            System.out.println();
-
-            res.toFirst();
-            while (res.hasAccess()) {
-                System.out.println(res.getContent().getSrc().getID());
-                res.next();
+        edges.front().setMark(true);
+        if (timer > 0.5) {
+            if (!edges.isEmpty()) {
+                edges.front().setMark(false);
+                edges.dequeue();
             }
-            done = true;
+            timer = 0;
         }
     }
 

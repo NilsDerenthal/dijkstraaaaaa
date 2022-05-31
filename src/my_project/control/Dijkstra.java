@@ -1,14 +1,8 @@
 package my_project.control;
 
-import KAGO_framework.control.ViewController;
-import KAGO_framework.model.abitur.datenstrukturen.Graph;
-import KAGO_framework.model.abitur.datenstrukturen.List;
-import KAGO_framework.model.abitur.datenstrukturen.Vertex;
+import KAGO_framework.model.abitur.datenstrukturen.*;
 import my_project.model.VertexData;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.function.Function;
 
 public class Dijkstra {
@@ -17,13 +11,14 @@ public class Dijkstra {
 
 	private final Vertex start;
 	private final Vertex end;
-	private final Runnable repainter;
 
-	public Dijkstra (Graph graph, Vertex start, Vertex end, Runnable repainter) {
+	private final Queue<Edge> queueOrder;
+
+	public Dijkstra (Graph graph, Vertex start, Vertex end) {
 		this.graph = graph;
 		this.start = start;
 		this.end = end;
-		this.repainter = repainter;
+		this.queueOrder = new Queue<>();
 	}
 
 	public VertexData execute () {
@@ -50,10 +45,7 @@ public class Dijkstra {
 				var nbData = find(all, neighbours.getContent());
 
 				var edge = graph.getEdge(neighbours.getContent(), tmp.getSrc());
-
-				edge.setMark(true);
-				repainter.run();
-				edge.setMark(false);
+				queueOrder.enqueue(edge);
 
 				double sum = tmp.getDist() + edge.getWeight();
 
@@ -109,5 +101,9 @@ public class Dijkstra {
 			src.next();
 		}
 		return res;
+	}
+
+	public Queue<Edge> getEdges () {
+		return queueOrder;
 	}
 }
