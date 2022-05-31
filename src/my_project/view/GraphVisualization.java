@@ -37,12 +37,12 @@ public class GraphVisualization extends GraphicalObject {
 		while (l.hasAccess()) {
 			coordinates.put(
 				l.getContent(),
-				new Point((x - 1) * 250 + rand.nextInt(50) + 10, (y - 1) * 250 + rand.nextInt(50) + 10)
+				new Point((x - 1) * 250 + rand.nextInt(150) + 10, (y - 1) * 250 + rand.nextInt(150) + 10)
 			);
 
 			// x + 1 unless at the end, then y = 0
-			y += (x >= 3) ? 1 : 0;
-			x %= 3;
+			y += (x >= 4) ? 1 : 0;
+			x %= 4;
 			x++;
 			l.next();
 		}

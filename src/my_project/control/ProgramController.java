@@ -52,23 +52,35 @@ public class ProgramController {
         Vertex f = new Vertex("f");
         Vertex g = new Vertex("g");
         Vertex h = new Vertex("h");
+        Vertex i = new Vertex("i");
+        Vertex j = new Vertex("j");
+        Vertex k = new Vertex("k");
+        Vertex l = new Vertex("l");
+        Vertex m = new Vertex("m");
 
-        var l = Arrays.asList(a, b, c, d, e, f, g, h);
+        var list = Arrays.asList(a, b, c, d, e, f, g, h, i, j, k, l, m);
 
-        for (Vertex vertex : l) {
+        for (Vertex vertex : list) {
             graph.addVertex(vertex);
         }
 
         add(a, b, 1);
         add(b, c, 2);
         add(c, d, 3);
-        add(d, e, 4);
         add(a, e, 20);
         add(a, f, 2);
         add(f, e, 12);
         add(f, g, 2);
         add(g, h, 3);
         add(h, e, 1);
+        add(c, i, 10);
+        add(h, i, 5);
+        add(d, k, 3);
+        add(l, k, 30);
+        add(m, b, 15);
+        add(m, j, 2);
+        add(a, j, 12);
+        add(m, k, 7);
 
 
         graphVis = new GraphVisualization(graph);
@@ -76,7 +88,7 @@ public class ProgramController {
         viewController.draw(graphVis);
 
         timer = 0;
-        result = dijkstra(a, e);
+        result = dijkstra(a, k);
     }
 
     private void add (Vertex a, Vertex b, double weight) {
@@ -109,7 +121,7 @@ public class ProgramController {
 
         if (!edges.isEmpty()) {
             edges.front().setMark(true);
-            if (timer > 0.25) {
+            if (timer > 0.1) {
 
                 edges.front().setMark(false);
                 edges.dequeue();
