@@ -63,9 +63,9 @@ public class ProgramController {
         add(b, c, 2);
         add(c, d, 3);
         add(d, e, 4);
-        add(a, e, 25);
+        add(a, e, 20);
         add(a, f, 2);
-        add(f, e, 10);
+        add(f, e, 12);
         add(f, g, 2);
         add(g, h, 3);
         add(h, e, 1);
