@@ -43,32 +43,33 @@ public class ProgramController {
     public void startProgram() {
         graph = new Graph();
 
+
         Vertex a = new Vertex("a");
         Vertex b = new Vertex("b");
         Vertex c = new Vertex("c");
         Vertex d = new Vertex("d");
         Vertex e = new Vertex("e");
         Vertex f = new Vertex("f");
+        Vertex g = new Vertex("g");
+        Vertex h = new Vertex("h");
 
-        var l = Arrays.asList(a, b, c, d, e, f);
+        var l = Arrays.asList(a, b, c, d, e, f, g, h);
 
         for (Vertex vertex : l) {
             graph.addVertex(vertex);
         }
 
-        graph.addEdge(new Edge(a, b, 1));
-        graph.addEdge(new Edge(b, c, 2));
+        add(a, b, 1);
+        add(b, c, 2);
+        add(c, d, 3);
+        add(d, e, 4);
+        add(a, e, 25);
+        add(a, f, 2);
+        add(f, e, 10);
+        add(f, g, 2);
+        add(g, h, 3);
+        add(h, e, 1);
 
-        graph.addEdge(new Edge(a, d, 5));
-
-        graph.addEdge(new Edge(c, d, 3));
-        graph.addEdge(new Edge(d, e, 4));
-
-        graph.addEdge(new Edge(a, e, 14));
-
-        graph.addEdge(new Edge(a, f, 7));
-
-        graph.addEdge(new Edge(f, e, 1));
 
         graphVis = new GraphVisualization(graph);
         graphVis.loadCoordinates();
@@ -76,6 +77,10 @@ public class ProgramController {
 
         timer = 0;
         result = dijkstra(a, e);
+    }
+
+    private void add (Vertex a, Vertex b, double weight) {
+        graph.addEdge(new Edge(a, b, weight));
     }
 
     private Queue<Edge> dijkstra (Vertex start, Vertex end) {
@@ -104,7 +109,7 @@ public class ProgramController {
 
         if (!edges.isEmpty()) {
             edges.front().setMark(true);
-            if (timer > edges.front().getWeight() / 5f) {
+            if (timer > 0.25) {
 
                 edges.front().setMark(false);
                 edges.dequeue();
